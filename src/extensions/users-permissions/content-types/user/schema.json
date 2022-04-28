@@ -63,23 +63,36 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "token": {
-      "type": "string"
-    },
     "ProfileImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "firebase_token": {
       "type": "text"
     },
     "PrimaryPhone": {
       "type": "string"
+    },
+    "token": {
+      "type": "integer"
+    },
+    "chat_messages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chat-message.chat-message",
+      "mappedBy": "to"
+    },
+    "chat_medias": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chat-media.chat-media",
+      "mappedBy": "to"
     }
   }
 }

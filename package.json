@@ -18,6 +18,7 @@
     "firebase-admin": "^10.1.0",
     "pubnub": "^5.0.1",
     "sqlite3": "5.0.2",
+    "strapi-plugin-populate-deep": "^0.1.2",
     "twilio": "^3.76.1",
     "uuid": "^8.3.2"
   },

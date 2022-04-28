@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "chats",
+  "info": {
+    "singularName": "chat",
+    "pluralName": "chats",
+    "displayName": "Chat",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "chat_messages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chat-message.chat-message",
+      "mappedBy": "chat"
+    },
+    "RoomId": {
+      "type": "text",
+      "unique": true,
+      "required": true
+    },
+    "chat_medias": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::chat-media.chat-media",
+      "mappedBy": "chat"
+    }
+  }
+}

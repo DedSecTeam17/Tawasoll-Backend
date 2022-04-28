@@ -1,0 +1,42 @@
+{
+  "kind": "collectionType",
+  "collectionName": "chat_medias",
+  "info": {
+    "singularName": "chat-media",
+    "pluralName": "chat-medias",
+    "displayName": "ChatMedia"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ChatFile": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "from": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "chat_medias"
+    },
+    "to": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "chat_medias"
+    },
+    "chat": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::chat.chat",
+      "inversedBy": "chat_medias"
+    }
+  }
+}
