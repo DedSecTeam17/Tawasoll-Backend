@@ -20,20 +20,33 @@ module.exports = [
   },
   {
     method: 'POST',
-    path: '/users/test',
-    handler: 'user.test',
-    config: {
-      prefix: '',
-    },
-  },
-  {
-    method: 'POST',
     path: '/users/verify',
     handler: 'user.verify',
     config: {
       prefix: '',
     },
   },
+  {
+    method: 'POST',
+    path: '/users/contacts',
+    handler: 'user.contacts',
+    config: {
+      prefix: '',
+    },
+  },
+  {
+    method: 'POST',
+    path: '/users/updateFcm',
+    handler: 'user.updateFcm',
+    config: {
+      prefix: '',
+    },
+  },
+
+
+
+
+
 
 
 ];

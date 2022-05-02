@@ -165,7 +165,7 @@ module.exports = createCoreController(ModelsUIDProvider.chatUID, ({strapi}) => (
 
       const chatMessages = chatRoom["chat_messages"]
       const chatMedia = chatRoom["chat_medias"]
-      var chatRoomMessages = []
+      let chatRoomMessages = [];
 
 
       chatMessages.forEach(message => {
@@ -206,7 +206,6 @@ module.exports = createCoreController(ModelsUIDProvider.chatUID, ({strapi}) => (
       }
     }
 
-    // return entries
   }
 
 

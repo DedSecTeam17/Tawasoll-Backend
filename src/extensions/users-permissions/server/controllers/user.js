@@ -1,5 +1,5 @@
 'use strict';
-const {PluginsNameHelper} = require("../../../../core/helpers");
+const {PluginsNameHelper, ModelsUIDProvider} = require("../../../../core/helpers");
 const {getService} = require("@strapi/plugin-users-permissions/server/utils");
 require('dotenv').config()
 
@@ -20,6 +20,11 @@ const smsClient = require('twilio')(twilio.id, twilio.token);
 
 const utils = require('@strapi/utils');
 const {SmsClient} = require("../../../../core/lib/SmsClient");
+const {
+  REQUEST_SUCCESS_CODE,
+  REQUEST_SUCCESS_EMPTY_DATA,
+  REQUEST_SUCCESS_UPDATED_CODE
+} = require("../../../../core/rest_api_response_code");
 const {sanitize} = utils;
 const {ApplicationError, ValidationError} = utils.errors;
 
@@ -129,7 +134,7 @@ module.exports = {
         });
 
 
-        const {email , username } = data
+        const {email, username} = data
         return {
           success: true,
           message: 'User verified successfully',
@@ -147,17 +152,70 @@ module.exports = {
 
   },
 
-  async find(ctx, next, { populate } = {}) {
+  async find(ctx, next, {populate} = {}) {
     console.log(populate)
     const users = await getService('user').fetchAll(ctx.query.filters, populate);
 
     ctx.body = await Promise.all(users.map(user => sanitizeOutput(user, ctx)));
   },
 
-  async test(ctx) {
-    return {
-      "message": "message"
-    }
-  }
+  async contacts(ctx) {
+    const {contacts} = ctx.request.body
+    const {PrimaryPhone} = ctx.state.user
+    const parsedContacts = JSON.parse(contacts)
+    const contactsWithOutMyNumber = parsedContacts.filter(contact => contact !== PrimaryPhone)
 
-};
+
+    let result = await strapi.query(PluginsNameHelper.userPermissionPlugin).findMany({
+      where: {
+        "PrimaryPhone": contactsWithOutMyNumber
+      },
+    });
+
+
+    if (result.length > 0) {
+      return {
+        "data": {
+          "status": REQUEST_SUCCESS_CODE,
+          "contacts": result.map((contact) => {
+            return {
+              "to": contact["id"],
+              "PrimaryPhone": contact["PrimaryPhone"]
+            }
+          })
+        }
+      }
+    } else {
+      return {
+        "data": {
+          "status": REQUEST_SUCCESS_EMPTY_DATA,
+          "contacts": []
+        }
+      }
+    }
+  },
+
+  async updateFcm(ctx) {
+    const {token} = ctx.request.body;
+    if (!token) return ctx.badRequest('missing.token');
+    const user = ctx.state.user
+
+    try {
+      const data = await getService('user').edit(user.id, {
+        "firebase_token": token
+      });
+      return {
+        "data": {
+          "status": REQUEST_SUCCESS_UPDATED_CODE,
+          "message": "Firebase token updated successfully"
+        }
+      };
+    } catch (e) {
+      throw new ApplicationError(e.message);
+
+    }
+
+
+  }
+}
+;
