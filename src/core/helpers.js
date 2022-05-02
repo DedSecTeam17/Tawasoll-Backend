@@ -7,6 +7,9 @@ class PluginsNameHelper {
 
 class ModelsUIDProvider {
   static chatUID = "api::chat.chat"
+  static chatMessageUID = "api::chat-message.chat-message"
+  static chatMediaUID = "api::chat-media.chat-media"
+
 
 }
 
