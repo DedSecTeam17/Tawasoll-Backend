@@ -26,7 +26,7 @@ class RealTimeMessenger {
       message: message
     }
 
-    console.log(payload)
+    // console.log(payload)
     pubnub.publish(payload, function (status, response) {
       console.log(status, response);
     })

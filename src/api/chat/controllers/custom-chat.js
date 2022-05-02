@@ -64,7 +64,7 @@ module.exports = createCoreController(ModelsUIDProvider.chatUID, ({strapi}) => (
     const realTimeMessenger = new RealTimeMessenger()
 
 
-    const {type, RoomId, to,ReceiverListeningId} = ctx.request.body
+    const {type, RoomId, to, ReceiverListeningId} = ctx.request.body
     console.log(ReceiverListeningId)
     realTimeMessenger.init(ReceiverListeningId)
     const isTextMessage = type === "text"
@@ -97,6 +97,9 @@ module.exports = createCoreController(ModelsUIDProvider.chatUID, ({strapi}) => (
 
       }
       realTimeMessenger.sentMessage(data)
+      const notificationResponse =  await strapi.service(ModelsUIDProvider.chatUID).sendNotificationToDevice("New message", "Attachment", data, to)
+
+      console.log(notificationResponse)
       return data
     } else {
       const file = ctx.request.files["file"]
@@ -133,6 +136,10 @@ module.exports = createCoreController(ModelsUIDProvider.chatUID, ({strapi}) => (
 
         }
       }
+
+     const notificationResponse =  await strapi.service(ModelsUIDProvider.chatUID).sendNotificationToDevice("New message", "Attachment", data, to)
+
+      console.log(notificationResponse)
       realTimeMessenger.sentMessage(data)
 
 
